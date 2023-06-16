@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<!-- Hack or Snooze
+
+     This is the only HTML page; the applications manipulates this DOM
+     during use.
+
+     Primary authors:
+     - Michael Hueter: initial creation, 2018
+     - Elie Schoppik: refactoring using OO, 2019
+     - Joel Burton: refactored and componentized, 2020
+     - You!
+  -->
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hack or Snooze</title>
+  <link href="https://bootswatch.com/5/united/bootstrap.css" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📰</text></svg>">
+  <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+      integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+      crossorigin="anonymous">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/user.css">
+  <link rel="stylesheet" href="css/stories.css">
+  <link rel="stylesheet" href="css/nav.css">
+</head>
+
+<body>
+
+<!-- top navigation bar -->
+<!-- <nav>
+  <div class="navbar-brand">
+    <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-link" href="#" id="nav-login">login/signup</a>
+    <a class="nav-link" href="#" id="nav-user-profile"></a>
+    <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
+  </div>
+</nav> -->
+
+<!-- replacement nav -->
+<nav class="navbar sticky-top navbar-expand-lg">
+  <div class="container-fluid">
+    <div class="navbar-brand">
+      <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
+    </div>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav main-nav-links hidden me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#storyModal" role="button">Submit</a>
+        </li>
+
+        <li class="nav-item">
+          <a id="nav-favorites" class="nav-link" href="#">Favorites</a>
+        </li>
+        
+        <li class="nav-item">
+          <a id="nav-my-stories" class="nav-link" href="#">Stories</a>
+        </li>
+      </ul>
+      <div class="nav-profile">
+        <a class="nav-lin" href="#" id="nav-login">login/signup</a>
+        <a class="nav-lin" href="#" id="nav-user-profile"></a>
+        <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
+      </div>
+    </div>
+  </div>
+</nav>
+<!--  -->
+
+<!-- area for stories (all stories, user stories, favorites) -->
+<section class="stories-container">
+
+  <!-- loading message (removed by JS after stories loaded) -->
+  <div id="stories-loading-msg">Loading&hellip;</div>
+
+  <!-- List of all stories -->
+  <ol id="all-stories-list" class="hidden stories-list"></ol>
+  
+  <ol id="favorite-stories-list" class="hidden stories-list"></ol>
+
+  <ol id="my-stories-list" class="hidden stories-list"></ol>
+
+</section>
+
+<!-- Login and signup forms -->
+<section class="account-forms-container container">
+
+  <!-- Login form -->
+  <form action="#" id="login-form" class="account-form hidden" method="post" novalidate>
+    <h4>Login</h4>
+    <div class="login-input">
+      <label for="login-username">username</label>
+      <input id="login-username" autocomplete="current-username">
+      <div class="invalid-username invalid-feedback">
+        
+      </div>
+    </div>
+    <div class="login-input">
+      <label for="login-password">password</label>
+      <input id="login-password" type="password" autocomplete="current-password">
+      <div class="invalid-password invalid-feedback">
+        
+      </div>
+    </div>
+    <button type="submit">login</button>
+    <hr>
+  </form>
+
+  <!-- Signup form -->
+  <form
+      action="#"
+      id="signup-form"
+      class="account-form hidden"
+      method="post">
+    <h4>Create Account</h4>
+    <div class="login-input">
+      <label for="signup-name">name</label>
+      <input id="signup-name" autocapitalize="words">
+    </div>
+    <div class="login-input">
+      <label for="signup-username">username</label>
+      <input id="signup-username" autocomplete="new-username">
+
+      <div class="invalid-username invalid-feedback"></div>
+    </div>
+    <div class="login-input">
+      <label for="signup-password">password</label>
+      <input id="signup-password" autocomplete="new-password" type="password">
+
+      <div class="invalid-password invalid-feedback"></div>
+    </div>
+    <button type="submit">create account</button>
+  </form>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Submit A Story</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="new-story-form" class="control-form" method="post">
+          <div class="mb-3 row">
+            <label for="new-story-author" class="col-sm-2 col-form-label">Author</label>
+            <div class="col-sm-10">
+              <input id="new-story-author" type="text" readonly class="form-control-plaintext">
+              <input id="new-story-username" class="d-none" type="hidden" readonly>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="new-story-title" class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-10">
+              <input id="new-story-title" class="form-control" placeholder="story title" type="text" required>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="new-story-url" class="col-sm-2 col-form-label">Url</label>
+            <div class="col-sm-10">
+              <input id="new-story-url" class="form-control" placeholder="story url" type="text">
+              <div class="invalid-url invalid-feedback">Please enter a valid url</div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+      
+  </div>
+</div>
+
+<!-- Library JS & our JS -->
+<script src="https://unpkg.com/jquery"></script>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/models.js"></script>
+<script src="js/main.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/user.js"></script>
+<script src="js/stories.js"></script>
+
+</body>
+</html>
